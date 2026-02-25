@@ -9,7 +9,7 @@
 
 # This setting is required, and should be a string that is
 # used as the main title for the project documentation
-site_name: ''
+site_name: 'JAX-LaB'
 
 # The canonical URL of the site
 # adds a link tag to the generated HTML header
@@ -107,6 +107,7 @@ plugins:
         python:
           options:
             separate_signature: true      
+            show_root_heading: true
   # - toc-sidebar
   # - tooltipster-links
 
@@ -147,11 +148,11 @@ extra_javascript:
   - https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js
 
 nav:
-  - JAX-LaB's home: index.md
-  - JAX-LaB API:
-    - JAX-LaB base: base.md
-    - JAX-LaB models: models.md
-    - JAX-LaB multiphase: multiphase.md
-    - JAX-LaB lattice: lattice.md
-    - JAX-LaB utils: utils.md
-    - JAX-LaB boundary conditions: boundary_conditions.md
+  - Home: index.md
+  - API:
+    - Base: base.md
+    - Boundary Conditions: boundary_conditions.md
+    - Models: models.md
+    - Multiphase: multiphase.md
+    - Lattice: lattice.md
+    - Utilities: utils.md

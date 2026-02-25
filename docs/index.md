@@ -5,20 +5,8 @@ JAX-LaB is a fully differentiable, accelerated multiphysics and multiphase 2D/3D
 inverse modeling of multiphase flows. JAX-LaB is an extension of [XLB](https://github.com/Autodesk/XLB) and adds support multiphase and multiphysics flows to the original library.
 
 ## Showcase
-<!-- <p align="center">
-  <img src="assets/capillary_fingering.gif" alt="" width="600">
-</p>
-<p align="center" width="300">
-  Capillary fingering in a channel (multi-component simulation)
-</p>
 <p align="center">
-  <img src="assets/capillary_rise.gif" alt="" width="700">
-</p>
-<p align="center" width="300">
-  Capillary rise in parallel plates (single component, multiphase simulation)
-</p> -->
-<p align="center">
-  <img src="assets/evaporation.gif" alt="" width="600">
+  <img src="assets/3D_evaporation.gif" alt="" width="600">
 </p>
 <p align="center">
     Time evolution of liquid distribution in a porous medium during evaporation. Two-component (air–water) system simulated with the Cascaded (central-moment) collision model.
@@ -36,24 +24,11 @@ inverse modeling of multiphase flows. JAX-LaB is an extension of [XLB](https://g
 <p align="center">
   In-situ GPU rendering of drainage in a porous geometry. BGK collision model, 110 million cells.
 </p>
-<!--<p align="center">
-  <img src="assets/car.png" alt="" width="500">
-</p>
-<p align="center">
-<a href=https://www.epc.ed.tum.de/en/aer/research-groups/automotive/drivaer > DrivAer model </a> in a wind-tunnel using KBC Lattice Boltzmann Simulation with approx. 317 million cells
-</p>
-
-<p align="center">
-  <img src="assets/building.png" alt="" width="700">
-</p>
-<p align="center">
-  Airflow in to, out of, and within a building (~400 million cells)
-</p>-->
 <p align="center">
   <img src="assets/predicted.png" alt="" width="1000">
 </p>
 <p align="center">
-Temporal evolution of the density field determined using neural network for the inverse multiphase flow control problem of forming a droplet at t = 900. The MLP output is used as the initial condition for LBM and the backpropagation step during training leverages the auto-differentiation capabilities of JAX-LaB (see paper for details).
+Temporal evolution of the density field determined using neural network for the inverse multiphase flow control problem of forming a droplet at t = 900. The MLP output is used as the initial condition for LBM and the backpropagation step during training leverages the auto-differentiation capabilities of JAX-LaB (see <a href="https://doi.org/10.1029/2025MS005313">paper</a> for details).
 </p>
 
 <br>
@@ -109,11 +84,12 @@ user modification.
 
 ### Output
 
-- Binary and ASCII VTK output (based on PyVista library)
+- Binary and ASCII VTK output (based on [PyVista](https://docs.pyvista.org/) library)
+- HDF5 output (based on [h5py](https://docs.h5py.org/)) to maximize I/O speed and minimize storage requirement
 - In-situ rendering using [PhantomGaze](https://github.com/loliverhennigh/PhantomGaze) library
 - [Orbax](https://github.com/google/orbax)-based distributed asynchronous checkpointing
 - Image Output
-- 3D mesh voxelizer using trimesh
+- 3D mesh voxelizer using [trimesh](https://trimesh.org/)
 
 ### Boundary conditions
 
@@ -134,10 +110,12 @@ user modification.
 - **Convective Outflow BC**: Convective outflow boundary condition, useful for porous media flows.
 
 ## Accompanying Paper
-A preprint of the paper, accepted for publication in Journal of Advances in Modeling Earth Systems (JAMES), is available on [arXiv](https://arxiv.org/abs/2506.17713).
+Accompanying paper, published in Journal of Advances in Modeling Earth Systems (JAMES), is available [here](https://doi.org/10.1029/2025MS005313).
 
 ## Installation Guide
+
 To use JAX-LaB, you must first install JAX and other dependencies using the following commands:
+
 
 Please refer to https://github.com/google/jax for the latest installation documentation. The following table is taken from [JAX's Github page](https://github.com/google/jax).
 
@@ -149,7 +127,7 @@ Please refer to https://github.com/google/jax for the latest installation docume
 | AMD GPU    | Use [Docker](https://hub.docker.com/r/rocm/jax) or [build from source](https://jax.readthedocs.io/en/latest/developer.html#additional-notes-for-building-a-rocm-jaxlib-for-amd-gpus). |
 | Apple GPU  | Follow [Apple's instructions](https://developer.apple.com/metal/jax/).                                          |
 
-**Note:** We encountered challenges when executing XLB on Apple GPUs due to the lack of support for certain operations in the Metal backend. We advise using the CPU backend on Mac OS. We will be testing XLB on Apple's GPUs in the future and will update this section accordingly.
+**Note:** We encountered challenges when executing JAX-LaB on Apple GPUs due to the lack of support for certain operations in the Metal backend. We advise using the CPU backend on Mac OS. We will be testing JAX-LaB on Apple's GPUs in the future and will update this section accordingly.
 
 
 Install dependencies:
@@ -163,4 +141,3 @@ git clone https://github.com/piyush-ppradhan/JAX-LaB
 cd JAX-LaB
 export PYTHONPATH=.
 python3 examples/singlephase/cavity2d.py
-```

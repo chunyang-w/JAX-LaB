@@ -17,30 +17,29 @@ class BoundaryCondition(object):
 
     Attributes
     ----------
-    lattice : Lattice
-        The lattice used in the simulation.
-    nx:
-        The number of nodes in the x direction.
-    ny:
-        The number of nodes in the y direction.
-    nz:
-        The number of nodes in the z direction.
-    dim : int
-        The number of dimensions in the simulation (2 or 3).
-    precision_policy : PrecisionPolicy
-        The precision policy used in the simulation.
-    indices : array-like
-        The indices of the boundary nodes.
-    name : str or None
-        The name of the boundary condition. This should be set in subclasses.
-    isSolid : bool
-        Whether the boundary condition is for a solid boundary. This should be set in subclasses.
-    isDynamic : bool
-        Whether the boundary condition is dynamic (changes over time). This should be set in subclasses.
-    needsExtraConfiguration : bool
-        Whether the boundary condition requires extra configuration. This should be set in subclasses.
-    implementationStep : str
-        The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. This should be set in subclasses.
+    lattice (Lattice): The lattice used in the simulation.
+
+    nx (int): The number of nodes in the x direction.
+
+    ny (int): The number of nodes in the y direction.
+
+    nz (int): The number of nodes in the z direction.
+
+    dim (int): The number of dimensions in the simulation (2 or 3).
+
+    precision_policy (PrecisionPolicy): The precision policy used in the simulation.
+
+    indices (array-like): The indices of the boundary nodes.
+
+    name (str or None): The name of the boundary condition. This should be set in subclasses.
+
+    isSolid (bool): Whether the boundary condition is for a solid boundary. This should be set in subclasses.
+
+    isDynamic (bool): Whether the boundary condition is dynamic (changes over time). This should be set in subclasses.
+
+    needsExtraConfiguration (bool): Whether the boundary condition requires extra configuration. This should be set in subclasses.
+
+    implementationStep (str): The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. This should be set in subclasses.
     """
 
     def __init__(self, indices, gridInfo, precision_policy):
@@ -96,12 +95,11 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        grid_mask : array-like
-            The grid mask for the lattice.
+        grid_mask (array-like): The grid mask for the lattice.
 
         Returns
         -------
-        boundaryMask : array-like
+        boundaryMask : (array-like)
         """
         shifted_indices = np.array(self.indices)
         shifted_indices[0] += device_count()
@@ -118,8 +116,7 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        boundaryMask : array-like
-            The grid mask for the boundary voxels.
+        boundaryMask (array-like): The grid mask for the boundary voxels.
 
         Returns
         -------
@@ -138,17 +135,15 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The incoming distribution functions.
-        fin : jax.numpy.ndarray
-            The outgoing distribution functions.
-        implementation_step : str
-            The step in the lattice Boltzmann method algorithm at which the preparation is applied.
+        fout (jax.numpy.ndarray): The incoming distribution functions.
+
+        fin (jax.numpy.ndarray): The outgoing distribution functions.
+
+        implementation_step (str): The step in the lattice Boltzmann method algorithm at which the preparation is applied.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The prepared distribution functions.
+        (jax.numpy.ndarray): The prepared distribution functions.
 
         Notes
         -----
@@ -162,13 +157,11 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        boundaryMask : array-like
-            The boundary mask for the lattice.
+        boundaryMask (array-like): The boundary mask for the lattice.
 
         Returns
         -------
-        array-like
-            The normal vectors at the boundary nodes.
+        (array-like): The normal vectors at the boundary nodes.
 
         Notes
         -----
@@ -186,13 +179,11 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        boundaryMask : array-like
-            The boundary mask for the lattice.
+        boundaryMask (array-like): The boundary mask for the lattice.
 
         Returns
         -------
-        tuple of array-like
-            The missing and known indices for the boundary condition.
+        (tuple of array-like): The missing and known indices for the boundary condition.
 
         Notes
         -----
@@ -216,13 +207,11 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        boundaryMask : array-like
-            The boundary mask for the lattice.
+        boundaryMask (array-like): The boundary mask for the lattice.
 
         Returns
         -------
-        tuple of array-like
-            The missing, known, and middle masks for the boundary condition.
+        (tuple of array-like): The missing, known, and middle masks for the boundary condition.
 
         Notes
         -----
@@ -243,10 +232,9 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
+        fout (jax.numpy.ndarray: The output distribution functions.
+
+        fin : jax.numpy.ndarray): The input distribution functions.
 
         Returns
         -------
@@ -266,15 +254,13 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        rho : jax.numpy.ndarray
-            The density at each node in the lattice.
-        u : jax.numpy.ndarray
-            The velocity at each node in the lattice.
+        rho (jax.numpy.ndarray): The density at each node in the lattice.
+
+        u (jax.numpy.ndarray): The velocity at each node in the lattice.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The equilibrium distribution function at each node in the lattice.
+        (jax.numpy.ndarray): The equilibrium distribution function at each node in the lattice.
 
         Notes
         -----
@@ -297,13 +283,11 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        fneq : jax.numpy.ndarray
-            The non-equilibrium distribution function at each node in the lattice.
+        fneq (jax.numpy.ndarray): The non-equilibrium distribution function at each node in the lattice.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The momentum flux at each node in the lattice.
+        (jax.numpy.ndarray): The momentum flux at each node in the lattice.
 
         Notes
         -----
@@ -328,15 +312,13 @@ class BoundaryCondition(object):
 
         Parameters
         ----------
-        f_poststreaming : jax.numpy.ndarray
-            The post-streaming distribution function at each node in the lattice.
-        f_postcollision : jax.numpy.ndarray
-            The post-collision distribution function at each node in the lattice.
+        f_poststreaming (jax.numpy.ndarray): The post-streaming distribution function at each node in the lattice.
+
+        f_postcollision (jax.numpy.ndarray): The post-collision distribution function at each node in the lattice.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The force exerted on the solid geometry at each boundary node.
+        (jax.numpy.ndarray): The force exerted on the solid geometry at each boundary node.
 
         Notes
         -----
@@ -361,17 +343,15 @@ class BounceBack(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "BounceBackFullway".
-    implementationStep : str
-        The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class,
-        it is "PostCollision".
-    theta: jax.numpy.ndarray; Default: None
-        Contact angle, applied for multiphase flows and only set for wall boundary conditions.
-    phi: jax.numpy.ndarray; Default: None
-        Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
-    delta_rho: jax.numpy.ndarray; Default: None
-        Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
+    name (str): The name of the boundary condition. For this class, it is "BounceBackFullway".
+
+    implementationStep (str): The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class, it is "PostCollision".
+
+    theta (jax.numpy.ndarray; Default: None): Contact angle, applied for multiphase flows and only set for wall boundary conditions.
+
+    phi (jax.numpy.ndarray; Default: None): Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
+
+    delta_rho (jax.numpy.ndarray; Default: None): Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
     """
 
     def __init__(self, indices, gridInfo, precision_policy, theta=None, phi=None, delta_rho=None):
@@ -389,15 +369,13 @@ class BounceBack(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        fin (jax.numpy.ndarray): The input distribution functions.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
 
         Notes
         -----
@@ -418,22 +396,20 @@ class BounceBackMoving(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "BounceBackFullwayMoving".
-    implementationStep : str
-        The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class,
-        it is "PostCollision".
-    isDynamic : bool
-        Whether the boundary condition is dynamic (changes over time). For this class, it is True.
-    update_function : function
-        A function that updates the boundary condition. For this class, it is a function that updates the boundary
-        condition based on the current time step. The signature of the function is `update_function(time) -> (indices, vel)`,
-    theta: jax.numpy.ndarray; Default: None
-        Contact angle, applied for multiphase flows and only set for wall boundary conditions.
-    phi: jax.numpy.ndarray; Default: None
-        Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
-    delta_rho: pytree of jax.numpy.ndarray; Default: None
-        Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
+    name (str): The name of the boundary condition. For this class, it is "BounceBackFullwayMoving".
+
+    implementationStep (str): The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class, it is "PostCollision".
+
+    isDynamic (bool): Whether the boundary condition is dynamic (changes over time). For this class, it is True.
+
+    update_function (function): A function that updates the boundary condition. For this class, it is a function that updates the boundary
+    condition based on the current time step. The signature of the function is `update_function(time) -> (indices, vel)`,
+
+    theta (jax.numpy.ndarray; Default: None): Contact angle, applied for multiphase flows and only set for wall boundary conditions.
+
+    phi (jax.numpy.ndarray; Default: None): Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
+
+    delta_rho (pytree of jax.numpy.ndarray; Default: None): Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
     """
 
     def __init__(
@@ -463,17 +439,15 @@ class BounceBackMoving(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
-        time : int
-            The current time step.
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        fin (jax.numpy.ndarray): The input distribution functions.
+
+        time (int): The current time step.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
         """
         indices, vel = self.update_function(time)
         c = jnp.array(self.lattice.c, dtype=self.precisionPolicy.compute_dtype)
@@ -490,23 +464,21 @@ class BounceBackHalfway(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "BounceBackHalfway".
-    implementationStep : str
-        The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class,
-        it is "PostStreaming".
-    needsExtraConfiguration : bool
-        Whether the boundary condition needs extra configuration before it can be applied. For this class, it is True.
-    isSolid : bool
-        Whether the boundary condition represents a solid boundary. For this class, it is True.
-    vel : array-like
-        The prescribed value of velocity vector for the boundary condition. No-slip BC is assumed if vel=None (default).
-    theta: jax.numpy.ndarray; Default: None
-        Contact angle, applied for multiphase flows and only set for wall boundary conditions.
-    phi: jax.numpy.ndarray; Default: None
-        Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
-    delta_rho: pytree of jax.numpy.ndarray; Default: None
-        Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
+    name (str): The name of the boundary condition. For this class, it is "BounceBackHalfway".
+
+    implementationStep (str): The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class, it is "PostStreaming".
+
+    needsExtraConfiguration (bool): Whether the boundary condition needs extra configuration before it can be applied. For this class, it is True.
+
+    isSolid (bool): Whether the boundary condition represents a solid boundary. For this class, it is True.
+
+    vel (array-like): The prescribed value of velocity vector for the boundary condition. No-slip BC is assumed if vel=None (default).
+
+    theta (jax.numpy.ndarray; Default: None): Contact angle, applied for multiphase flows and only set for wall boundary conditions.
+
+    phi (jax.numpy.ndarray; Default: None): Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
+
+    delta_rho (pytree of jax.numpy.ndarray; Default: None): Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
     """
 
     def __init__(
@@ -535,8 +507,7 @@ class BounceBackHalfway(BoundaryCondition):
 
         Parameters
         ----------
-        boundaryMask : array-like
-            The grid mask for the boundary voxels.
+        boundaryMask (array-like): The grid mask for the boundary voxels.
 
         Returns
         -------
@@ -578,15 +549,13 @@ class BounceBackHalfway(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        fin (jax.numpy.ndarray): The input distribution functions.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
         """
         nbd = len(self.indices[0])
         bindex = np.arange(nbd)[:, None]
@@ -607,13 +576,11 @@ class EquilibriumBC(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "EquilibriumBC".
-    implementationStep : str
-        The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class,
-        it is "PostStreaming".
-    out : jax.numpy.ndarray
-        The equilibrium distribution function at the boundary nodes.
+    name (str): The name of the boundary condition. For this class, it is "EquilibriumBC".
+
+    implementationStep (str): The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class, it is "PostStreaming".
+
+    out (jax.numpy.ndarray): The equilibrium distribution function at the boundary nodes.
     """
 
     def __init__(self, indices, gridInfo, precision_policy, rho, u):
@@ -629,15 +596,13 @@ class EquilibriumBC(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        fin (jax.numpy.ndarray): The input distribution functions.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
 
         Notes
         -----
@@ -657,11 +622,9 @@ class DoNothing(BoundaryCondition):
 
         Attributes
         ----------
-        name : str
-            The name of the boundary condition. For this class, it is "DoNothing".
-        implementationStep : str
-            The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class,
-            it is "PostStreaming".
+        name (str): The name of the boundary condition. For this class, it is "DoNothing".
+
+        implementationStep : str): The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class, it is "PostStreaming".
 
         Notes
         -----
@@ -712,17 +675,16 @@ class ZouHe(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "ZouHe".
-    implementationStep : str
-        The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class,
-        it is "PostStreaming".
-    type : str
-        The type of the boundary condition. It can be either 'velocity' for a prescribed velocity boundary condition,
-        or 'pressure' for a prescribed pressure boundary condition.
-    prescribed : float or array-like
-        The prescribed values for the boundary condition. It can be either the prescribed velocities for a 'velocity'
-        boundary condition, or the prescribed pressures for a 'pressure' boundary condition.
+    name (str): The name of the boundary condition. For this class, it is "ZouHe".
+
+    implementationStep (str): The step in the lattice Boltzmann method algorithm at which the boundary condition is applied. For this class,it is "PostStreaming".
+
+    type (str): The type of the boundary condition. It can be either 'velocity' for a prescribed velocity boundary condition,
+    or 'pressure' for a prescribed pressure boundary condition.
+
+    prescribed (float or array-like): The prescribed values for the boundary condition. It can be either the prescribed velocities for a 'velocity'
+
+    boundary condition, or the prescribed pressures for a 'pressure' boundary condition.
 
     References
     ----------
@@ -815,15 +777,12 @@ class ZouHe(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        _ : jax.numpy.ndarray
-            The input distribution functions. This is not used in this method.
+        fout (jax.numpy.ndarray): The output distribution functions.
+        _ (jax.numpy.ndarray): The input distribution functions. This is not used in this method.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
 
         Notes
         -----
@@ -853,15 +812,16 @@ class Regularized(ZouHe):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "Regularized".
-    Qi : numpy.ndarray
-        The Qi tensor, which is used in the regularization of the distribution functions.
+    name (str): The name of the boundary condition. For this class, it is "Regularized".
+
+    Qi (numpy.ndarray): The Qi tensor, which is used in the regularization of the distribution functions.
 
     References
     ----------
     Latt, J. (2007). Hydrodynamic limit of lattice Boltzmann equations. PhD thesis, University of Geneva.
+
     Latt, J., Chopard, B., Malaspinas, O., Deville, M., & Michler, A. (2008). Straight velocity boundaries in the
+
     lattice Boltzmann method. Physical Review E, 77(5), 056703. doi:10.1103/PhysRevE.77.056703
     """
 
@@ -905,15 +865,13 @@ class Regularized(ZouHe):
 
         Parameters
         ----------
-        fpop : jax.numpy.ndarray
-            The distribution functions.
-        feq : jax.numpy.ndarray
-            The equilibrium distribution functions.
+        fpop (jax.numpy.ndarray): The distribution functions.
+
+        feq (jax.numpy.ndarray): The equilibrium distribution functions.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The regularized distribution functions.
+        (jax.numpy.ndarray): The regularized distribution functions.
         """
 
         # Compute momentum flux of off-equilibrium populations for regularization: Pi^1 = Pi^{neq}
@@ -941,15 +899,13 @@ class Regularized(ZouHe):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        _ : jax.numpy.ndarray
-            The input distribution functions. This is not used in this method.
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        _ (jax.numpy.ndarray): The input distribution functions. This is not used in this method.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
 
         Notes
         -----
@@ -978,10 +934,9 @@ class ExtrapolationOutflow(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "ExtrapolationOutflow".
-    sound_speed : float
-        The speed of sound in the simulation.
+    name (str): The name of the boundary condition. For this class, it is "ExtrapolationOutflow".
+
+    sound_speed (float): The speed of sound in the simulation.
 
     References
     ----------
@@ -1002,8 +957,7 @@ class ExtrapolationOutflow(BoundaryCondition):
 
         Parameters
         ----------
-        boundaryMask : np.ndarray
-            The grid mask for the boundary voxels.
+        boundaryMask (np.ndarray): The grid mask for the boundary voxels.
         """
         hasFluidNeighbour = ~boundaryMask[:, self.lattice.opp_indices]
         idx = np.array(self.indices).T
@@ -1022,17 +976,15 @@ class ExtrapolationOutflow(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The incoming distribution functions.
-        fin : jax.numpy.ndarray
-            The outgoing distribution functions.
-        implementation_step : str
-            The step in the lattice Boltzmann method algorithm at which the preparation is applied.
+        fout (jax.numpy.ndarray): The incoming distribution functions.
+
+        fin (jax.numpy.ndarray): The outgoing distribution functions.
+
+        implementation_step (str): The step in the lattice Boltzmann method algorithm at which the preparation is applied.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The prepared distribution functions.
+        (jax.numpy.ndarray): The prepared distribution functions.
 
         Notes
         -----
@@ -1063,15 +1015,12 @@ class ExtrapolationOutflow(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
+        fout (jax.numpy.ndarray): The output distribution functions.
+        fin (jax.numpy.ndarray): The input distribution functions.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
         """
         nbd = len(self.indices[0])
         bindex = np.arange(nbd)[:, None]
@@ -1090,20 +1039,17 @@ class InterpolatedBounceBackBouzidi(BounceBackHalfway):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "InterpolatedBounceBackBouzidi".
-    implicit_distances : array-like
-        An array of shape (nx,ny,nz) indicating the signed-distance field from the solid walls
-    weights : array-like
-        An array of shape (number_of_bc_cells, q) initialized as None and constructed using implicit_distances array
-        during runtime. These "weights" are associated with the fractional distance of fluid cell to the boundary
-        position defined as: weights(dir_i) = |x_fluid - x_boundary(dir_i)| / |x_fluid - x_solid(dir_i)|.
-    theta: jax.numpy.ndarray; Default: None
-        Contact angle, applied for multiphase flows and only set for wall boundary conditions.
-    phi: jax.numpy.ndarray; Default: None
-        Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
-    delta_rho: jax.numpy.ndarray; Default: None
-        Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
+    name (str): The name of the boundary condition. For this class, it is "InterpolatedBounceBackBouzidi".
+    implicit_distances (array-like): An array of shape (nx,ny,nz) indicating the signed-distance field from the solid walls
+    weights (array-like): An array of shape (number_of_bc_cells, q) initialized as None and constructed using implicit_distances array
+    during runtime. These "weights" are associated with the fractional distance of fluid cell to the boundary
+    position defined as: weights(dir_i) = |x_fluid - x_boundary(dir_i)| / |x_fluid - x_solid(dir_i)|.
+
+    theta (jax.numpy.ndarray; Default: None): Contact angle, applied for multiphase flows and only set for wall boundary conditions.
+
+    phi (jax.numpy.ndarray; Default: None): Contact angle parameter phi, applied for multiphase flows and only set for wall boundary conditions.
+
+    delta_rho (jax.numpy.ndarray; Default: None): Contact angle parameter delta_rho, applied for multiphase flows and only set for wall boundary conditions.
     """
 
     def __init__(self, indices, implicit_distances, grid_info, precision_policy, vel=None, theta=None, phi=None, delta_rho=None):
@@ -1145,15 +1091,13 @@ class InterpolatedBounceBackBouzidi(BounceBackHalfway):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        fin (jax.numpy.ndarray): The input distribution functions.
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
         """
         if self.weights is None:
             self.set_proximity_ratio()
@@ -1197,8 +1141,7 @@ class InterpolatedBounceBackDifferentiable(InterpolatedBounceBackBouzidi):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "InterpolatedBounceBackDifferentiable".
+    name (str): The name of the boundary condition. For this class, it is "InterpolatedBounceBackDifferentiable".
     """
 
     def __init__(self, indices, implicit_distances, grid_info, precision_policy, vel=None):
@@ -1249,8 +1192,7 @@ class ConvectiveOutflow(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "ConvectiveOutflow".
+    name (str): The name of the boundary condition. For this class, it is "ConvectiveOutflow".
 
     References
     ----------
@@ -1326,10 +1268,9 @@ class ConvectiveOutflow(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        fin : jax.numpy.ndarray
-            The input distribution functions.
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        fin (jax.numpy.ndarray): The input distribution functions.
 
         Returns
         -------
@@ -1371,8 +1312,7 @@ class ExtrapolationOutflowMultiphase(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "NonEquilibriumExtrapolation".
+    name (str): The name of the boundary condition. For this class, it is "NonEquilibriumExtrapolation".
 
     References
     ----------
@@ -1400,10 +1340,9 @@ class ExtrapolationOutflowMultiphase(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        _: jax.numpy.ndarray
-            The input distribution functions, not used in this function
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        _ (jax.numpy.ndarray): The input distribution functions, not used in this function
 
         Returns
         -------
@@ -1427,8 +1366,7 @@ class NonEquilibriumExtrapolation(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "NonEquilibriumExtrapolation".
+    name (str): The name of the boundary condition. For this class, it is "NonEquilibriumExtrapolation".
 
     References
     ----------
@@ -1458,10 +1396,9 @@ class NonEquilibriumExtrapolation(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        _: jax.numpy.ndarray
-            The input distribution functions, not used in this function
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        _ (jax.numpy.ndarray): The input distribution functions, not used in this function
 
         Returns
         -------
@@ -1493,13 +1430,13 @@ class ExactNonEquilibriumExtrapolation(BoundaryCondition):
 
     Attributes
     ----------
-    name : str
-        The name of the boundary condition. For this class, it is "ExactNonEquilibriumExtrapolation".
+    name (str): The name of the boundary condition. For this class, it is "ExactNonEquilibriumExtrapolation".
 
     References
     ----------
     1. Zhao-Li, G., Chu-Guang, Z. & Bao-Chang, S. Non-equilibrium extrapolation method for velocity and pressure boundary conditions in the lattice
     Boltzmann method. Chinese Phys. 11, 366–374 (2002).
+
     2. Fei, L., Qin, F., Zhao, J., Derome, D. & Carmeliet, J. Lattice Boltzmann modelling of isothermal two-component evaporation in porous media.
     Journal of Fluid Mechanics 955, A18 (2023).
     """
@@ -1580,15 +1517,13 @@ class ExactNonEquilibriumExtrapolation(BoundaryCondition):
 
         Parameters
         ----------
-        fout : jax.numpy.ndarray
-            The output distribution functions.
-        _: jax.numpy.ndarray
-            The input distribution functions, not used in this function
+        fout (jax.numpy.ndarray): The output distribution functions.
+
+        _ (jax.numpy.ndarray): The input distribution functions, not used in this function
 
         Returns
         -------
-        jax.numpy.ndarray
-            The modified output distribution functions after applying the boundary condition.
+        (jax.numpy.ndarray): The modified output distribution functions after applying the boundary condition.
         """
         nbd = len(self.indices[0])
         bindex = np.arange(nbd)[:, None]

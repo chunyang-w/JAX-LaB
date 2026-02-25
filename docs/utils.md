@@ -2,6 +2,8 @@
 
 ::: src.utils.save_image
 
+::: src.utils.save_fields_hdf5_xdmf
+
 ::: src.utils.save_fields_vtk
 
 ::: src.utils.live_volume_randering

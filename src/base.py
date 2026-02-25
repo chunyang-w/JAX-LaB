@@ -34,17 +34,17 @@ class LBMBase(object):
 
     Parameters
     ----------
-        lattice (object): The lattice object that contains the lattice structure and weights.
+    lattice (object): The lattice object that contains the lattice structure and weights.
 
-        omega (float): The relaxation parameter for the LBM simulation.
+    omega (float): The relaxation parameter for the LBM simulation.
 
-        nx (int): Number of grid points in the x-direction.
+    nx (int): Number of grid points in the x-direction.
 
-        ny (int): Number of grid points in the y-direction.
+    ny (int): Number of grid points in the y-direction.
 
-        nz (int, optional): Number of grid points in the z-direction. Defaults to 0.
+    nz (int, optional): Number of grid points in the z-direction. Defaults to 0.
 
-        precision (str, optional): A string specifying the precision used for the simulation. Defaults to "f32/f32".
+    precision (str, optional): A string specifying the precision used for the simulation. Defaults to "f32/f32".
     """
 
     def __init__(self, **kwargs):
