@@ -28,8 +28,11 @@ output*/
 !XLB_diff.png
 !predicted.png
 
-# Geometry file
-assets/*.mat
+# Geometry files (any depth)
+**/assets/*.mat
+
+# Simulation results
+results/
 
 # Vagrant
 .vagrant/
@@ -165,3 +168,6 @@ dmypy.json
 
 # Checkpoints (default dir for JAX-LaB)
 checkpoints/*
+
+# Personal tutorials
+docs/porous_media_tutorial.md

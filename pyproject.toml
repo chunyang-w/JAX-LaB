@@ -4,4 +4,15 @@ version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []
+dependencies = [
+    "h5py>=3.16.0",
+    "jax[cuda12]>=0.6.2",
+    "jmp>=0.0.4",
+    "matplotlib>=3.10.8",
+    "numpy>=2.2.6",
+    "orbax>=0.1.9",
+    "path>=17.1.1",
+    "pyvista>=0.47.1",
+    "termcolor>=3.3.0",
+    "trimesh>=4.11.3",
+]
