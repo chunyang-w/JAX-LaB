@@ -5,15 +5,18 @@ description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
+    "cupy-cuda12x>=14.0.1",
     "h5py>=3.16.0",
     "ipython>=8.38.0",
     "ipywidgets>=8.1.8",
     "jax[cuda12]>=0.6.2",
     "jmp>=0.0.4",
     "matplotlib>=3.10.8",
+    "numba>=0.64.0",
     "numpy>=2.2.6",
     "orbax>=0.1.9",
     "path>=17.1.1",
+    "phantomgaze",
     "pyvista[jupyter]>=0.47.1",
     "scikit-image>=0.25.2",
     "termcolor>=3.3.0",
@@ -22,3 +25,6 @@ dependencies = [
     "trame-vuetify>=3.2.1",
     "trimesh>=4.11.3",
 ]
+
+[tool.uv.sources]
+phantomgaze = { git = "https://github.com/loliverhennigh/PhantomGaze" }

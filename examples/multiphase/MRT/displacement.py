@@ -26,7 +26,7 @@ import h5py
 from src.lattice import LatticeD3Q19
 from src.eos import Peng_Robinson
 from src.multiphase import MultiphaseMRT
-from src.boundary_conditions import BounceBack
+from src.boundary_conditions import BounceBack, ConvectiveOutflow
 from src.utils import save_fields_vtk
 
 
@@ -57,6 +57,16 @@ class PorousMedia(MultiphaseMRT):
         wall = tuple(idx.T)
         self.BCs[0].append(BounceBack(wall, self.gridInfo, self.precisionPolicy, theta_w[wall], phi_w[wall], delta_rho_w[wall]))
         self.BCs[1].append(BounceBack(wall, self.gridInfo, self.precisionPolicy, theta_c[wall], phi_c[wall], delta_rho_c[wall]))
+
+        # NOTE: Convective outflow BC applied to the right face (outlet) for both components.
+        # This implements the Lou et al. (2013) first-order upwind advection condition:
+        #   f(outlet, t+1) = (1 - λ)·f(outlet-1, t+1) + λ·f(outlet, t),  λ = max(u·n)
+        # Without this, the outlet defaults to periodic streaming, causing CO2 that exits
+        # the right face to re-enter at the left (inlet) buffer, leading to unphysical
+        # mass accumulation, density pile-up beyond the EOS stability limit, and NaN.
+        outlet = self.boundingBoxIndices["right"]
+        self.BCs[0].append(ConvectiveOutflow(tuple(outlet.T), self.gridInfo, self.precisionPolicy))
+        self.BCs[1].append(ConvectiveOutflow(tuple(outlet.T), self.gridInfo, self.precisionPolicy))
 
     def output_data(self, **kwargs):
         rho = np.array(kwargs.get("rho_total")[0, 1:-1, 1:-1, 1:-1, :])

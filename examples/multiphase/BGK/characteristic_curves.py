@@ -66,8 +66,13 @@ class Droplet3D(MultiphaseBGK):
         p_tree = map(lambda rho: rho * self.lattice.cs2, rho_tree)
         return p_tree
 
-    @partial(jit, static_argnums=(0,))
-    def compute_total_pressure(self, p_tree):
+    # NOTE: @partial(jit) intentionally removed from this override. JAX caches the trace
+    # based on the number of concrete args at first call. The base run() calls this as
+    # compute_total_pressure(p_tree, rho_tree), but if JAX previously compiled a trace
+    # from a call with only (p_tree,), it raises "takes 2 positional arguments but 3
+    # were given". Removing the decorator lets the base class jit context trace through
+    # this function correctly without a separate cached signature.
+    def compute_total_pressure(self, p_tree, rho_tree=None):
         p_water = p_tree[0]
         p_air = p_tree[1]
         return p_water + p_air + 3 * self.g_kkprime[0, 1] * p_air * p_water
@@ -168,8 +173,8 @@ class DropletOnWall3D(MultiphaseBGK):
         p_tree = map(lambda rho: rho * self.lattice.cs2, rho_tree)
         return p_tree
 
-    @partial(jit, static_argnums=(0,))
-    def compute_total_pressure(self, p_tree):
+    # NOTE: @partial(jit) intentionally removed — see Droplet3D.compute_total_pressure note.
+    def compute_total_pressure(self, p_tree, rho_tree=None):
         p_water = p_tree[0]
         p_air = p_tree[1]
         return p_water + p_air + 3 * self.g_kkprime[0, 1] * p_air * p_water
@@ -249,8 +254,8 @@ class PorousMedia(MultiphaseBGK):
         p_tree = map(lambda rho: rho * self.lattice.cs2, rho_tree)
         return p_tree
 
-    @partial(jit, static_argnums=(0,))
-    def compute_total_pressure(self, p_tree):
+    # NOTE: @partial(jit) intentionally removed — see Droplet3D.compute_total_pressure note.
+    def compute_total_pressure(self, p_tree, rho_tree=None):
         p_water = p_tree[0]
         p_air = p_tree[1]
         return p_water + p_air + 3 * self.g_kkprime[0, 1] * p_air * p_water

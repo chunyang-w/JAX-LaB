@@ -17,7 +17,7 @@ import numpy as np
 from src.lattice import LatticeD3Q19
 from src.eos import Peng_Robinson
 from src.multiphase import MultiphaseMRT
-from src.boundary_conditions import BounceBack
+from src.boundary_conditions import BounceBack, ConvectiveOutflow
 from src.utils import save_fields_vtk
 
 import h5py
@@ -279,31 +279,18 @@ class PorousMedia(MultiphaseMRT):
         #     )
         # )
         #
-        # Same at the outlet
-        # outlet = self.boundingBoxIndices["right"]
-        # rho_outlet = rho_w_l * np.ones(
-        #     (outlet.shape[0], 1), dtype=self.precisionPolicy.compute_dtype
-        # )
-        # vel_outlet = np.zeros(
-        #     (outlet.shape[0], 3), dtype=self.precisionPolicy.compute_dtype
-        # )
-        # self.BCs[0].append(
-        #     ConvectiveOutflow(
-        #         tuple(outlet.T),
-        #         self.gridInfo,
-        #         self.precisionPolicy,
-        #     )
-        # )
-        # rho_outlet = rho_c_g * np.ones(
-        #     (outlet.shape[0], 1), dtype=self.precisionPolicy.compute_dtype
-        # )
-        # self.BCs[1].append(
-        #     ConvectiveOutflow(
-        #         tuple(outlet.T),
-        #         self.gridInfo,
-        #         self.precisionPolicy,
-        #     )
-        # )
+        # NOTE: Convective outflow BC applied to the right face (outlet) for both components.
+        # This implements the Lou et al. (2013) first-order upwind advection condition:
+        #   f(outlet, t+1) = (1 - λ)·f(outlet-1, t+1) + λ·f(outlet, t),  λ = max(u·n)
+        # Without this, the outlet defaults to periodic streaming, causing CO2 that exits
+        # the right face to re-enter at the left (inlet) buffer, leading to unphysical
+        # mass accumulation, density pile-up beyond the EOS stability limit, and NaN.
+        # rho_outlet variables below are unused — ConvectiveOutflow requires no prescribed density.
+        # rho_outlet = rho_w_l * np.ones((outlet.shape[0], 1), dtype=self.precisionPolicy.compute_dtype)
+        # rho_outlet = rho_c_g * np.ones((outlet.shape[0], 1), dtype=self.precisionPolicy.compute_dtype)
+        outlet = self.boundingBoxIndices["right"]
+        self.BCs[0].append(ConvectiveOutflow(tuple(outlet.T), self.gridInfo, self.precisionPolicy))
+        self.BCs[1].append(ConvectiveOutflow(tuple(outlet.T), self.gridInfo, self.precisionPolicy))
 
         # Wall boundary condition
         # wall = np.concatenate(
