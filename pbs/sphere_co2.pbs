@@ -1,0 +1,32 @@
+#!/bin/bash
+#PBS -N sphere_co2
+#PBS -l select=1:ncpus=8:ngpus=1:mem=128gb:gpu_type=A100
+#PBS -l walltime=72:00:00
+#PBS -o /dev/null
+#PBS -e /dev/null
+
+PROJECT_ROOT=/gpfs/home/cw1722/sponge/JAX-LaB
+GEOMETRY=/gpfs/home/cw1722/sponge/spongecore/data/structure/sphere/sphere_0000.npy
+OUTPUT_DIR="${PROJECT_ROOT}/results/sphere"
+LOG="${OUTPUT_DIR}/run.log"
+
+mkdir -p "${OUTPUT_DIR}"
+exec > >(tee -a "${LOG}") 2>&1
+
+source "${PROJECT_ROOT}/.venv/bin/activate"
+export PYTHONPATH="${PROJECT_ROOT}"
+cd "${OUTPUT_DIR}"
+
+echo "Job started at:  $(date)"
+echo "Host:            $(hostname)"
+echo "GPU(s):          ${CUDA_VISIBLE_DEVICES}"
+echo "Python:          $(python3 --version)"
+echo "Geometry:        ${GEOMETRY}"
+echo "Working dir:     $(pwd)"
+echo "================================================================================"
+
+python3 -u "${PROJECT_ROOT}/examples/multiphase/MRT/displacement.py" \
+    --geometry "${GEOMETRY}"
+
+echo "================================================================================"
+echo "Job finished at: $(date)"
