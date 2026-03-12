@@ -1,16 +1,25 @@
 """
-CO2 drainage simulation in a Berea sandstone porous medium.
+CO2 drainage simulation in a porous medium.
 
 Runs only the large-scale PorousMedia (third) stage of displacement_studies.py.
 Parameters (fluid densities, contact angle, wettability) are the calibrated
 values determined from the Droplet3D and DropletOnWall3D calibration runs.
 
-Geometry source:
+Accepts geometry from either:
+  .mat  (HDF5, key "bin", 0=pore 1=solid)  — default Berea sandstone
+  .npy  (bool/int array, True/1=solid)      — e.g. poly_sphere geometry
+
+Usage:
+    python3 displacement.py                                    # default .mat
+    python3 displacement.py --geometry /path/to/geometry.npy  # .npy input
+
+Geometry source (default):
     E. Santos, Javier, et al. "3D Dataset of Simulations." Digital Rocks Portal.
     https://www.doi.org/10.17612/93pd-y471
 """
 
 import os
+import argparse
 import numpy as np
 import h5py
 
@@ -81,7 +90,35 @@ class PorousMedia(MultiphaseMRT):
         save_fields_vtk(timestep, fields, "output", "data")
 
 
+def _load_geometry(path: str) -> np.ndarray:
+    """
+    Load a binary porous geometry from .mat or .npy and return a boolean
+    array of shape (Gx, Gy, Gz) where True = solid grain.
+
+    .mat  — HDF5 file with dataset "bin"; value 1 = solid.
+    .npy  — NumPy array of bool or int; True / 1 = solid.
+
+    Both must be (256, 256, 256) to match the buffer/domain layout.
+    """
+    ext = os.path.splitext(path)[1].lower()
+    if ext == ".npy":
+        arr = np.load(path)
+        return arr.astype(bool)
+    elif ext == ".mat":
+        with h5py.File(path, "r") as f:
+            return np.array(f["bin"], dtype=bool)
+    else:
+        raise ValueError(f"Unsupported geometry format '{ext}'. Use .npy or .mat")
+
+
 if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description="CO2 drainage — MRT LBM")
+    parser.add_argument(
+        "--geometry",
+        default="./assets/374_09_03_256.mat",
+        help="Path to geometry file (.npy or .mat). Default: Berea .mat",
+    )
+    args = parser.parse_args()
     precision = "f32/f32"
 
     # ── Fluid-fluid interaction ───────────────────────────────────────────────
@@ -149,12 +186,19 @@ if __name__ == "__main__":
     ny = 256
     nz = 256
 
-    # ── Geometry: Berea sandstone (Digital Rocks Portal) ─────────────────────
-    geometry = h5py.File("./assets/374_09_03_256.mat", "r")
-    _bin = np.array(geometry["bin"], dtype=int)
-    ind  = np.where(_bin == 1.0)
-    idx  = np.zeros((len(ind[0]), 3), dtype=int)
-    idx[:, 0] = ind[0] + buffer
+    # ── Geometry ──────────────────────────────────────────────────────────────
+    # solid_mask: bool array (Gx, Gy, Gz), True = grain.
+    # Must be 256 x 256 x 256 — the buffer slab is prepended in x.
+    solid_mask = _load_geometry(args.geometry)
+    assert solid_mask.shape == (256, 256, 256), (
+        f"Geometry must be 256x256x256, got {solid_mask.shape}"
+    )
+    print(f"Geometry loaded from : {args.geometry}")
+    print(f"Solid fraction       : {solid_mask.mean():.4f}")
+
+    ind = np.where(solid_mask)
+    idx = np.zeros((len(ind[0]), 3), dtype=int)
+    idx[:, 0] = ind[0] + buffer   # shift grains past the CO2 injection buffer
     idx[:, 1] = ind[1]
     idx[:, 2] = ind[2]
 
