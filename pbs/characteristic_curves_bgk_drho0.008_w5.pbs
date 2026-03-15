@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -N characteristic_curves_bgk_drainage
+#PBS -N cc_bgk_drho0.008_w5
 #PBS -l select=1:ncpus=8:ngpus=1:mem=128gb:gpu_type=A100
 #PBS -l walltime=72:00:00
 #PBS -o /dev/null
@@ -8,7 +8,9 @@
 PROJECT_ROOT=/gpfs/home/cw1722/sponge/JAX-LaB
 GEOMETRY="${PROJECT_ROOT}/examples/multiphase/BGK/assets/374_05_03_256.mat"
 SIMULATION=drainage
-OUTPUT_DIR="${PROJECT_ROOT}/results/characteristic_curves_bgk_${SIMULATION}"
+DRHO=0.008
+WIDTH=5
+OUTPUT_DIR="${PROJECT_ROOT}/results/characteristic_curves_bgk_${SIMULATION}_drho${DRHO}_w${WIDTH}"
 LOG="${OUTPUT_DIR}/run.log"
 
 mkdir -p "${OUTPUT_DIR}"
@@ -25,12 +27,16 @@ echo "GPU(s):          ${CUDA_VISIBLE_DEVICES}"
 echo "Python:          $(python3 --version)"
 echo "Geometry:        ${GEOMETRY}"
 echo "Simulation:      ${SIMULATION}"
+echo "drho:            ${DRHO}"
+echo "width:           ${WIDTH}"
 echo "Working dir:     $(pwd)"
 echo "================================================================================"
 
 python3 -u "${PROJECT_ROOT}/examples/multiphase/BGK/characteristic_curves.py" \
     --geometry "${GEOMETRY}" \
-    --simulation "${SIMULATION}"
+    --simulation "${SIMULATION}" \
+    --drho "${DRHO}" \
+    --width "${WIDTH}"
 
 echo "================================================================================"
 echo "Job finished at: $(date)"

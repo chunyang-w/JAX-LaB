@@ -1,14 +1,14 @@
 #!/bin/bash
-#PBS -N characteristic_curves_bgk_drainage
+#PBS -N characteristic_curves_bgk_sphere_drainage
 #PBS -l select=1:ncpus=8:ngpus=1:mem=128gb:gpu_type=A100
 #PBS -l walltime=72:00:00
 #PBS -o /dev/null
 #PBS -e /dev/null
 
 PROJECT_ROOT=/gpfs/home/cw1722/sponge/JAX-LaB
-GEOMETRY="${PROJECT_ROOT}/examples/multiphase/BGK/assets/374_05_03_256.mat"
+GEOMETRY=/gpfs/home/cw1722/sponge/spongecore/data/structure/sphere/sphere_0000.npy
 SIMULATION=drainage
-OUTPUT_DIR="${PROJECT_ROOT}/results/characteristic_curves_bgk_${SIMULATION}"
+OUTPUT_DIR="${PROJECT_ROOT}/results/characteristic_curves_bgk_sphere_${SIMULATION}"
 LOG="${OUTPUT_DIR}/run.log"
 
 mkdir -p "${OUTPUT_DIR}"

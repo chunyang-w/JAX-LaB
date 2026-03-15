@@ -1,5 +1,5 @@
 #!/bin/bash
-#PBS -N characteristic_curves_bgk_drainage
+#PBS -N characteristic_curves_bgk_imbibition
 #PBS -l select=1:ncpus=8:ngpus=1:mem=128gb:gpu_type=A100
 #PBS -l walltime=72:00:00
 #PBS -o /dev/null
@@ -7,7 +7,7 @@
 
 PROJECT_ROOT=/gpfs/home/cw1722/sponge/JAX-LaB
 GEOMETRY="${PROJECT_ROOT}/examples/multiphase/BGK/assets/374_05_03_256.mat"
-SIMULATION=drainage
+SIMULATION=imbibition
 OUTPUT_DIR="${PROJECT_ROOT}/results/characteristic_curves_bgk_${SIMULATION}"
 LOG="${OUTPUT_DIR}/run.log"
 
