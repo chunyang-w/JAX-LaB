@@ -9,7 +9,7 @@
 #SBATCH --error=/dev/null
 
 PROJECT_ROOT=/home/cywang/sponge/JAX-LaB
-GEOMETRY="${PROJECT_ROOT}/examples/multiphase/BGK/assets/374_05_03_256.mat"
+GEOMETRY="${PROJECT_ROOT}/assets/374_05_03_256.mat"
 SIMULATION=imbibition
 OUTPUT_DIR="${PROJECT_ROOT}/results/characteristic_curves_bgk_${SIMULATION}"
 LOG="${OUTPUT_DIR}/run.log"

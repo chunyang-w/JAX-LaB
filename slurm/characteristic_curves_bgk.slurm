@@ -37,3 +37,5 @@ python3 -u "${PROJECT_ROOT}/examples/multiphase/BGK/characteristic_curves.py" \
 
 echo "================================================================================"
 echo "Job finished at: $(date)"
+
+# uv run python3 examples/multiphase/BGK/characteristic_curves.py -geometry assets/374_05_03_256.mat

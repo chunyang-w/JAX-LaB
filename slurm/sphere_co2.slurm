@@ -9,7 +9,7 @@
 #SBATCH --error=/dev/null
 
 PROJECT_ROOT=/home/cywang/sponge/JAX-LaB
-GEOMETRY=/home/cywang/sponge/spongecore/data/structure/sphere/sphere_0000.npy
+GEOMETRY="${PROJECT_ROOT}/assets/374_05_03_256.mat"
 OUTPUT_DIR="${PROJECT_ROOT}/results/sphere"
 LOG="${OUTPUT_DIR}/run.log"
 

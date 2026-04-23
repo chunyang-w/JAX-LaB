@@ -484,7 +484,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--drho",
         type=float,
-        default=0.0046,
+        default=0.0092,
         help="Density perturbation at inlet/outlet BCs (pressure driving force). Default: 0.0046",
     )
     parser.add_argument(

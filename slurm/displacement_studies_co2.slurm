@@ -19,11 +19,6 @@ mkdir -p "${OUTPUT_DIR}"
 # in real time while still flowing to the SLURM stdout stream.
 exec > >(tee -a "${LOG}") 2>&1
 
-# Symlink the geometry assets folder into the output directory so that the
-# relative path ./assets/374_09_03_256.mat used in displacement_studies.py
-# resolves correctly when the working directory is results/co2/.
-ln -sfn "${PROJECT_ROOT}/assets" "${OUTPUT_DIR}/assets"
-
 # ── Environment ───────────────────────────────────────────────────────────────
 # Activate the uv-managed virtual environment (jax-lab, Python 3.10)
 source "${PROJECT_ROOT}/.venv/bin/activate"
@@ -46,7 +41,8 @@ echo "Python:          $(python3 --version)"
 echo "Working dir:     $(pwd)"
 echo "================================================================================"
 
-python3 -u "${PROJECT_ROOT}/examples/multiphase/MRT/displacement_studies.py"
+python3 -u "${PROJECT_ROOT}/examples/multiphase/MRT/displacement.py" \
+    --geometry "${PROJECT_ROOT}/assets/374_09_03_256.mat"
 
 echo "================================================================================"
 echo "Job finished at: $(date)"
