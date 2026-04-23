@@ -1,0 +1,37 @@
+#!/bin/bash
+#PBS -N drainage_mrt_64
+#PBS -l select=1:ncpus=8:ngpus=1:mem=128gb:gpu_type=A100
+#PBS -l walltime=72:00:00
+#PBS -o /dev/null
+#PBS -e /dev/null
+
+PROJECT_ROOT=/gpfs/home/cw1722/sponge/JAX-LaB
+GEOMETRY="${PROJECT_ROOT}/cases/drainage/374_05_03_64.mat"
+SIMULATION=drainage
+OUTPUT_DIR="${PROJECT_ROOT}/cases/drainage_mrt/64"
+LOG="${OUTPUT_DIR}/run.log"
+
+mkdir -p "${OUTPUT_DIR}"
+mkdir -p "${OUTPUT_DIR}/images"
+exec > >(tee -a "${LOG}") 2>&1
+
+source "${PROJECT_ROOT}/.venv/bin/activate"
+export PYTHONPATH="${PROJECT_ROOT}"
+cd "${OUTPUT_DIR}"
+
+echo "Job started at:  $(date)"
+echo "Host:            $(hostname)"
+echo "GPU(s):          ${CUDA_VISIBLE_DEVICES}"
+echo "Python:          $(python3 --version)"
+echo "Geometry:        ${GEOMETRY}"
+echo "Simulation:      ${SIMULATION}"
+echo "Solver:          MRT"
+echo "Working dir:     $(pwd)"
+echo "================================================================================"
+
+python3 -u "${PROJECT_ROOT}/cases/drainage_mrt/characteristic_curves.py" \
+    --geometry "${GEOMETRY}" \
+    --simulation "${SIMULATION}"
+
+echo "================================================================================"
+echo "Job finished at: $(date)"
